@@ -16,7 +16,7 @@ function login(username, password) {
     }
   }).fail(function(res) {
     alert('Login failed: network error');
-    console.err(res);
+    console.log(res);
   });
 }
 
@@ -33,7 +33,7 @@ function logout() {
       alert('Logout failed');
     }
   }).fail(function(res) {
-    console.err(res);
+    console.log(res);
     alert('Logout failed');
   });
 }
