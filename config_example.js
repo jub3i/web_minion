@@ -14,6 +14,5 @@ var users = [
 
 module.exports = {
   users: users,
-  //paths: paths,
   port: 3001,
 };
