@@ -125,7 +125,7 @@ app.post('/login', function(req, res) {
   }
 });
 
-//post login route
+//post logout route
 app.post('/logout', function(req, res) {
   req.session.loggedIn = false;
   logFn('successful logout for ' + req.session.user.username + ' (' + req.ip + ')');
