@@ -14,6 +14,7 @@ var PATH_SEP = path.sep;
 var protectStaticPath = require(path.join(__dirname, PATH_SEP + 'lib' + PATH_SEP + 'protectStaticPath'));
 
 var logFn = require(path.join(__dirname, PATH_SEP + 'lib' + PATH_SEP + 'logFn'));
+
 /*
  * VARS
  */
@@ -79,7 +80,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //the root route is the login page
 app.get('/', function(req, res) {
-  logFn('Serving login page to: ' + req.ip);
+  logFn('serving login page to: ' + req.ip);
   res.end(loginHtml);
 });
 
@@ -114,7 +115,7 @@ app.post('/login', function(req, res) {
     req.session.user = result;
     req.session.loggedIn = true;
     logFn('successful login for ' + result.username + ' (' + req.ip + ')');
-    res.send({ sc: 0 });
+    res.send({ sc: 0, path: result.path });
 
   //password did not match
   } else {
