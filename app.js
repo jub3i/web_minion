@@ -56,7 +56,7 @@ var app = express();
 
 //middleware: session
 app.use(session({
-  secret: 'keyboard cat',
+  secret: 'ak$&#lk#49&*',
   resave: false,
   saveUninitialized: true,
   name: 'gdm.sid',
