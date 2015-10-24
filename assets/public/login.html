@@ -1,9 +1,33 @@
 <html>
   <head>
-    <title>Login</title>
-    <script src="/login.js"></script>
+    <link rel="stylesheet" type= "text/css" href="login.css">
+    <script type="text/javascript" src="jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="login.js"></script>
+    <script type="text/javascript" src="GDM_API.min.js"></script>
+    <title>GDMPLUS Login</title>
   </head>
   <body>
-    <p> Hi! </p>
+      <div class="fullContainer">
+        <div id="contentHolder"
+          <div class="loginCover">
+            <div class="loginBoxCover borderStyles">
+              <div class="loginBox">
+                <div class="loginDivs">GDM+</div>
+                <div class="loginDivs">
+                  <div>Username:</div>
+                  <div class="loginInput"><input id="unInput" ></input></div>
+                </div>
+                <div class="loginDivs">
+                  <div>Password:</div>
+                  <div class = "loginInput"><input id="pwInput"></input></div>
+                </div>
+                <div class="loginDivs loginButtonCenter">
+                  <div><button id="loginBtn">Login</button></div>
+                  <div><button id="cancelBtn">cancel</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
   </body>
 </html>

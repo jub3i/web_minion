@@ -3,6 +3,7 @@
  */
 
 var express = require('express');
+var session = require('express-session');
 var http = require('http');
 var path = require('path');
 var fs = require('fs');
@@ -12,12 +13,13 @@ var PATH_SEP = path.sep;
 var protectStaticPath = require(path.join(__dirname, PATH_SEP + 'lib' + PATH_SEP + 'protectStaticPath'));
 
 /*
- * VARIABLES
+ * VARS
  */
 
 var version = '0.1';
 
 var assetPath = path.join(__dirname, PATH_SEP + 'assets');
+
 var publicPath = assetPath + PATH_SEP + 'public';
 
 var loginHtmlPath = publicPath + PATH_SEP + 'login.html';
@@ -50,11 +52,25 @@ var paths = _.uniq(_.pluck(config.users, 'path'));
 
 var app = express();
 
+//session middleware
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  name: 'gdm.sid',
+  cookie: {
+    path: '/',
+    maxAge: null,
+    secure: false, //https only
+    httpOnly: true,
+  },
+}));
+
 /*
  * EXPRESS ROUTES
  */
 
-//the root route is the login path
+//the root route is the login page
 app.get('/', function(req, res) {
   console.log('Serving login page to: ' + req.ip);
   res.end(loginHtml);
@@ -69,6 +85,10 @@ paths.forEach(function(path) {
 
 //otherwise, serve public static assets
 app.use('/', express.static(publicPath));
+
+app.post('/login', function(req, res) {
+  res.send({ sc: 0 });
+});
 
 /*
  * WEB SERVER INIT
