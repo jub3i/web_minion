@@ -1,0 +1,8 @@
+#WEB_MINION
+
+##Installation
+
+1) createa a copy of `./config_example.js` and name it `./config.js`
+2) create users and paths as neccessary
+3) create directories in `./assets/` matching the paths in the `./config.js` file
+
