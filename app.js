@@ -8,15 +8,15 @@ var http = require('http');
 var path = require('path');
 var fs = require('fs');
 var _ = require('underscore');
+var bodyParser = require('body-parser');
 
 var PATH_SEP = path.sep;
 var protectStaticPath = require(path.join(__dirname, PATH_SEP + 'lib' + PATH_SEP + 'protectStaticPath'));
 
+var logFn = require(path.join(__dirname, PATH_SEP + 'lib' + PATH_SEP + 'logFn'));
 /*
  * VARS
  */
-
-var version = '0.1';
 
 var assetPath = path.join(__dirname, PATH_SEP + 'assets');
 
@@ -24,6 +24,7 @@ var publicPath = assetPath + PATH_SEP + 'public';
 
 var loginHtmlPath = publicPath + PATH_SEP + 'login.html';
 var loginHtml = fs.readFileSync(loginHtmlPath, 'utf8');
+
 
 /*
  * READ CONFIG FILE
@@ -34,8 +35,8 @@ var config;
 try {
   config = require(path.join(__dirname, PATH_SEP + 'config'));
 } catch (err) {
-  console.log('ERROR: could not load `./config.js` (TIP: create a config file from `./config_example.js`)\n');
-  console.log(err);
+  logFn('ERROR: could not load `./config.js` (TIP: create a config file from `./config_example.js`)\n');
+  logFn(err, true);
   process.exit(1);
 }
 
@@ -52,7 +53,7 @@ var paths = _.uniq(_.pluck(config.users, 'path'));
 
 var app = express();
 
-//session middleware
+//middleware: session
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
@@ -66,27 +67,69 @@ app.use(session({
   },
 }));
 
+//middleware: for parsing application/json
+app.use(bodyParser.json());
+
+//middleware: for parsing application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
+
 /*
  * EXPRESS ROUTES
  */
 
 //the root route is the login page
 app.get('/', function(req, res) {
-  console.log('Serving login page to: ' + req.ip);
+  logFn('Serving login page to: ' + req.ip);
   res.end(loginHtml);
 });
 
 //mount protected paths
 paths.forEach(function(path) {
-  var regex = new RegExp('^\/' + path + '\/.*$');
-  app.use(protectStaticPath(regex));
+  app.use(protectStaticPath(path));
   app.use('/' + path, express.static(assetPath + PATH_SEP + path));
 });
 
 //otherwise, serve public static assets
 app.use('/', express.static(publicPath));
 
+//post login route
 app.post('/login', function(req, res) {
+  console.log(req.session);
+
+  //look up user
+  var result = _.find(config.users, function(user) {
+    if (user.username === req.body.username) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+
+  //check if we found a user
+  if (_.isUndefined(result)) {
+    logFn('failed login from ' + req.ip);
+    logFn(req.body, true);
+    res.send({ sc: 1 });
+
+  //check users password
+  } else if (result.password === req.body.password) {
+    req.session.user = result;
+    req.session.loggedIn = true;
+    logFn('successful login for ' + result.username + ' (' + req.ip + ')');
+    res.send({ sc: 0 });
+
+  //password did not match
+  } else {
+    logFn('failed login from ' + req.ip);
+    logFn(req.body, true);
+    res.send({ sc: 1 });
+  }
+});
+
+//post login route
+app.post('/logout', function(req, res) {
+  req.session.loggedIn = false;
+  logFn('successful logout for ' + req.session.user.username + ' (' + req.ip + ')');
   res.send({ sc: 0 });
 });
 
@@ -95,5 +138,5 @@ app.post('/login', function(req, res) {
  */
 
 http.createServer(app).listen(config.port, function() {
-  console.log('WebMinion v' + version + ' listening on port ' + config.port);
+  logFn('listening on port ' + config.port);
 });

@@ -3,9 +3,9 @@
  */
 
 var users = [
-  { user: 'john', pass: '123456', path: 'abc' },
-  { user: 'sally', pass: '123456', path: 'abc' },
-  { user: 'bob', pass: '123456', path: 'xyz' },
+  { username: 'john', password: '123456', path: 'abc' },
+  { username: 'sally', password: '123456', path: 'abc' },
+  { username: 'bob', password: '123456', path: 'xyz' },
 ];
 
 /*
