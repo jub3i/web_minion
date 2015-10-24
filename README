@@ -1,11 +1,13 @@
-#WEB_MINION
+# WEB_MINION
 
-##Installation
+## installation
 
-1) create a copy of `./config_example.js` and name it `./config.js`
-2) create users and paths as neccessary
-3) create directories in `./assets/` matching the paths in the `./config.js` file
+1. run the following command in the base directory:
+    `$ npm install`
+2. create a copy of `./config_example.js` and name it `./config.js`
+3. create users and paths as neccessary
+4. create directories in `./assets/` matching the paths in the `./config.js` file
 
-##Notes
+## notes
 
-1) uses memory based session store, if app restarts it will void all logins
+1. uses memory based session store, if app restarts it will void all logins
