@@ -1,4 +1,4 @@
 node_modules
 config.js
 assets/*
-!assets/public/*
+!assets/public/
