@@ -2,10 +2,9 @@
 
 ## installation
 
-1. run the following command in the base directory:
-    `$ npm install`
+1. run the following command in the base directory: `$ npm install`
 2. create a copy of `./config_example.js` and name it `./config.js`
-3. create users and paths as neccessary
+3. create users and paths as neccessary in the `./config.js` file
 4. create directories in `./assets/` matching the paths in the `./config.js` file
 
 ## notes
