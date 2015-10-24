@@ -9,15 +9,6 @@ var users = [
 ];
 
 /*
- * MOUNT PATHS
- */
-
-//var paths = [
-//  'abc',
-//  'xyz',
-//];
-
-/*
  * EXPORT
  */
 
