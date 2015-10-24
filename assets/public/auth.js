@@ -11,6 +11,7 @@ function login(username, password) {
   }).done(function(data) {
     if (data.sc === 0) {
       console.log(data);
+      window.location = '/' + data.path + '/';
     } else {
       alert('Login failed: incorrect username or password');
     }
