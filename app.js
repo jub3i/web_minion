@@ -94,8 +94,6 @@ app.use('/', express.static(publicPath));
 
 //post login route
 app.post('/login', function(req, res) {
-  console.log(req.session);
-
   //look up user
   var result = _.find(config.users, function(user) {
     if (user.username === req.body.username) {
