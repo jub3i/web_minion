@@ -32,7 +32,8 @@ var config;
 try {
   config = require(path.join(__dirname, PATH_SEP + 'config'));
 } catch (err) {
-  console.log('ERROR: could not find `./config.js` (TIP: create a config file from `./config_example.js`)');
+  console.log('ERROR: could not load `./config.js` (TIP: create a config file from `./config_example.js`)\n');
+  console.log(err);
   process.exit(1);
 }
 
