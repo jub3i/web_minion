@@ -26,7 +26,6 @@ var publicPath = assetPath + PATH_SEP + 'public';
 var loginHtmlPath = publicPath + PATH_SEP + 'login.html';
 var loginHtml = fs.readFileSync(loginHtmlPath, 'utf8');
 
-
 /*
  * READ CONFIG FILE
  */
