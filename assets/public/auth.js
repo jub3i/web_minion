@@ -33,8 +33,8 @@ function logout() {
       alert('Logout failed');
     }
   }).fail(function(res) {
+    alert('Logout failed: network error');
     console.log(res);
-    alert('Logout failed');
   });
 }
 
