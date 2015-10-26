@@ -58,7 +58,7 @@ app.use(session({
   secret: 'ak$&#lk#49&*',
   resave: false,
   saveUninitialized: true,
-  name: 'gdm.sid',
+  name: 'sid',
   cookie: {
     path: '/',
     maxAge: null,
