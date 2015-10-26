@@ -111,9 +111,13 @@ app.post('/login', function(req, res) {
 
   //check users password
   } else if (result.password === req.body.password) {
+    //store successful login on session
     req.session.user = result;
     req.session.loggedIn = true;
+
     logFn('successful login for ' + result.username + ' (' + req.ip + ')');
+
+    //send back success and a path to redirect to
     res.send({ sc: 0, path: result.path });
 
   //password did not match
