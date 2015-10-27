@@ -30,24 +30,24 @@ var loginHtmlPath = publicPath + PATH_SEP + 'login.html';
 var loginHtml = fs.readFileSync(loginHtmlPath, 'utf8');
 
 //permission check helper
-var userIsAllowed = function(req, path, callback) {
+var userIsAllowed = function(req, path, cb) {
   //if not logged in 403 immediately
   if (req.session.loggedIn === false) {
-    callback(false);
+    return cb(false);
   }
 
   //if no user object on session 403
   if (_.isUndefined(req.session.user)) {
-    return callback(false);
+    return cb(false);
   }
 
   //if path matches with allowed path on user session then allow
   if (req.session.user.path === path) {
-    return callback(true);
+    return cb(true);
 
   //otherwise 403
   } else {
-    return callback(false);
+    return cb(false);
   }
 };
 
