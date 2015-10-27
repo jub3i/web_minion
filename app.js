@@ -2,17 +2,20 @@
  * REQUIRES
  */
 
+//express
 var express = require('express');
 var session = require('express-session');
 var http = require('http');
+var bodyParser = require('body-parser');
+
+//utility
 var path = require('path');
 var fs = require('fs');
 var _ = require('underscore');
-var bodyParser = require('body-parser');
 
+//libs
 var PATH_SEP = path.sep;
-var protectStaticPath = require(path.join(__dirname, PATH_SEP + 'lib' + PATH_SEP + 'protectStaticPath'));
-
+var protectPath = require(path.join(__dirname, PATH_SEP + 'lib' + PATH_SEP + 'protectPath'));
 var logFn = require(path.join(__dirname, PATH_SEP + 'lib' + PATH_SEP + 'logFn'));
 
 /*
@@ -26,6 +29,28 @@ var publicPath = assetPath + PATH_SEP + 'public';
 var loginHtmlPath = publicPath + PATH_SEP + 'login.html';
 var loginHtml = fs.readFileSync(loginHtmlPath, 'utf8');
 
+//permission check helper
+var userIsAllowed = function(req, path, callback) {
+  //if not logged in 403 immediately
+  if (req.session.loggedIn === false) {
+    callback(false);
+  }
+
+  //if no user object on session 403
+  if (_.isUndefined(req.session.user)) {
+    return callback(false);
+  }
+
+  //if path matches with allowed path on user session then allow
+  if (req.session.user.path === path) {
+    return callback(true);
+
+  //otherwise 403
+  } else {
+    return callback(false);
+  }
+};
+
 /*
  * READ CONFIG FILE
  */
@@ -35,7 +60,8 @@ var config;
 try {
   config = require(path.join(__dirname, PATH_SEP + 'config'));
 } catch (err) {
-  logFn('ERROR: could not load `./config.js` (TIP: create a config file from `./config_example.js`)\n');
+  logFn('ERROR: could not load `./config.js` (TIP: create a config file ' +
+    'from `./config_example.js`)\n');
   logFn(err, true);
   process.exit(1);
 }
@@ -85,7 +111,21 @@ app.get('/', function(req, res) {
 
 //mount protected paths
 paths.forEach(function(path) {
-  app.use(protectStaticPath(path));
+  app.use(protectPath(path, userIsAllowed, function(allow, req, res, next) {
+    if (allow) {
+      return next();
+    } else {
+      logFn('403 Forbidden on "' + req.url + '" (' + req.ip + ')');
+
+      //log user info if session is present
+      if (req.session.user) {
+        logFn(req.session.user, true);
+      }
+
+      //return 403 forbidden
+      res.status(403).end('403 forbidden');
+    }
+  }));
   app.use('/' + path, express.static(assetPath + PATH_SEP + path));
 });
 
