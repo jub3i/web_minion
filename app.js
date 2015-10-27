@@ -13,7 +13,7 @@ var path = require('path');
 var fs = require('fs');
 var _ = require('underscore');
 
-//libs
+//local libs
 var PATH_SEP = path.sep;
 var protectPath = require(path.join(__dirname, PATH_SEP + 'lib' + PATH_SEP + 'protectPath'));
 var logFn = require(path.join(__dirname, PATH_SEP + 'lib' + PATH_SEP + 'logFn'));
@@ -115,7 +115,7 @@ paths.forEach(function(path) {
     if (allow) {
       return next();
     } else {
-      logFn('403 Forbidden on "' + req.url + '" (' + req.ip + ')');
+      logFn('403 forbidden on "' + req.url + '" (' + req.ip + ')');
 
       //log user info if session is present
       if (req.session.user) {
