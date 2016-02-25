@@ -157,8 +157,14 @@ app.post('/login', function(req, res) {
 
     logFn('successful login for ' + result.username + ' (' + req.ip + ')');
 
+    //configure success return json
+    var returnObj = { sc: 0, path: result.path };
+    if (result.rootIndex) {
+      returnObj.rootIndex = result.rootIndex;
+    }
+
     //send back success and a path to redirect to
-    res.send({ sc: 0, path: result.path });
+    res.send(returnObj);
 
   //password did not match
   } else {

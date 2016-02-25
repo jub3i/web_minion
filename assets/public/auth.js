@@ -10,7 +10,11 @@ function login(username, password) {
     },
   }).done(function(data) {
     if (data.sc === 0) {
-      window.location = '/' + data.path + '/';
+      if (data.rootIndex) {
+        window.location = '/' + data.path + '/' + data.rootIndex;
+      } else {
+        window.location = '/' + data.path + '/';
+      }
     } else {
       alert('Login failed: incorrect username or password');
     }
